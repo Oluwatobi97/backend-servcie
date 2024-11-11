@@ -1,9 +1,10 @@
 import { number, z } from "zod";
 import { db } from "../../../db/db-connect";
-import { UserTable } from "../schema/user-schema";
+
 import { zodUserSchema } from "../zod/user-zod-schema";
 import { TUser } from "../types";
 import { eq } from "drizzle-orm";
+import { usersTable } from "../../../schemas";
 
 
 // i want to create a function called dbActions
@@ -21,14 +22,14 @@ import { eq } from "drizzle-orm";
 export class UserRepository {
 
     creatUser = async (newUser: TUser) => {
-        return await db.insert(UserTable).values(newUser).returning()
+        return await db.insert(usersTable).values(newUser).returning()
     }
 
     findUserByEmail = async (email: string) => {
-        return await db.select().from(UserTable).where(eq(UserTable.email, email))
+        return await db.select().from(usersTable).where(eq(usersTable.email, email))
     }
     findUserById = async (id: number) => {
-        return await db.select().from(UserTable).where(eq(UserTable.id, id))
+        return await db.select().from(usersTable).where(eq(usersTable.id, id))
 
     }
 }
