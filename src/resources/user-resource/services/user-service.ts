@@ -4,6 +4,7 @@ import { zodUserSchema } from "../zod/user-zod-schema";
 import { BadRequestError, UnAuthorized } from "../../../utils/appError";
 import { encrypt } from "../../../lib/jwt/jwt-sign";
 import { TUser } from "../types";
+import { JwtPayload } from "jsonwebtoken";
 
 export class UserService {
     private userRepository: UserRepository
@@ -43,4 +44,16 @@ export class UserService {
 
         throw new UnAuthorized('Invalid username or password')
     }
+    getLoggedInUser = async (payLoad: JwtPayload) => {
+        const { id } = payLoad
+        console.log(payLoad)
+        const user = await this.userRepository.findUserById(id)
+        return { email: user[ 0 ].email, id: user[ 0 ].id }
+    }
+    // logOut = async (payLoad: JwtPayload) => {
+    //     const { id } = payLoad
+    //     console.log(payLoad)
+    //     const user = await this.userRepository.findUserById(id)
+    //     return { email: user[ 0 ].email, id: user[ 0 ].id }
+    // }
 }

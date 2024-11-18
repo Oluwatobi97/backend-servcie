@@ -1,4 +1,4 @@
-import {App} from './app'
+import { App, app } from './app'
 import logger from './utils/logget'
 
 const port = 5050
@@ -11,5 +11,5 @@ const port = 5050
 // })
 
 // console.log(schema)
-const {app} = new App()
+// const { app } = new App()
 app.listen(port, () => logger.info(`server started on port ${ port }`))

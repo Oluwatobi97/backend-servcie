@@ -9,7 +9,7 @@ export const investment = pgEnum("investment", [ 'Gold', 'Silver', 'Bronze' ])
 
 export const usersTable = pgTable("users", {
     id: serial().primaryKey().notNull(),
-    email: text().notNull(),
+    email: text().notNull().unique(),
     password: text().notNull(),
     createdAt: timestamp("created-at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
     updatedAt: timestamp("updated-at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
