@@ -3,7 +3,7 @@ import { Express } from "express";
 
 import request from 'supertest'
 
-import { App } from "../../app";
+import { app } from "../../app";
 import { TUser } from "../../resources/user-resource/types";
 
 
@@ -57,7 +57,6 @@ const PASSWORD_INVALID_OBJECT = [
 
 
 describe('user actions', () => {
-    const { app } = new App()
 
     describe('/api/v1/auth-system/create-accout', () => {
 
