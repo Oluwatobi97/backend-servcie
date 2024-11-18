@@ -16,6 +16,7 @@ export class UserController {
         try
         {
             const token = await this.userService.createUserService(req.body)
+            console.log(token)
 
             res.cookie('accessToken', token, {
                 httpOnly: true,
