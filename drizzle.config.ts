@@ -5,7 +5,7 @@ export default defineConfig({
     schema: './src/schemas/index.ts',
     out: './drizzle',
     dbCredentials: {
-        url: 'postgres://postgres:Password@localhost:5432/MediaBoardCast'
+        url: 'postgresql://tobi:NGgTeFxG3WiHmLAh44yVMPYPYq502MzY@dpg-cstkfhogph6c739frsng-a/invetment'
     }
 
 })
