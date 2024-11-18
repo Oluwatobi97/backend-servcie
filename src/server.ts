@@ -1,6 +1,5 @@
-const express = require('express')
+import express from 'express'
 
-import logger from './utils/logget'
 export const app = express()
 
 
@@ -15,4 +14,4 @@ const port = process.env.PORT || 5051
 
 // console.log(schema)
 // const { app } = new App()
-app.listen(port, () => logger.info(`server started on port ${ port }`))
+app.listen(port, () => console.log('hello'))
