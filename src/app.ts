@@ -13,7 +13,7 @@ export const app = express()
 
 app.use(cookieParser())
 app.use(cors({
-    origin: "http://localhost:5173",
+    origin: "*",
     credentials: true
 }))
 app.use(express.json())
@@ -21,6 +21,9 @@ app.use('/api/v1/auth-system', userRouter)
 app.use('/api/v1/investment', investMentRouter)
 app.use(errorHandler)
 
+app.get('/', (req, res)=>{
+    console.log('hello')
+})
 // export class App {
 //     app: Express
 
