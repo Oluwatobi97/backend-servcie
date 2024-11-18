@@ -26,7 +26,8 @@ export class UserController {
             }
             ).status(200).json({
                 message: 'account created',
-                status: 201
+                status: 201,
+                token:token
             })
 
             next()
@@ -49,7 +50,9 @@ export class UserController {
             }
             ).status(200).json({
                 message: 'Login SuccesFull',
-                status: 200
+                status: 200,
+                token:token
+
             })
             next()
         } catch (error)
