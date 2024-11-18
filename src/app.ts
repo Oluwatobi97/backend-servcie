@@ -12,13 +12,16 @@ export const app = express()
 
 
 app.use(cors({
-    origin: "http://localhost:5173",
-    credentials: true
+        origin: "http://localhost:5173",
+        credentials: true
 }))
+if(process.env.NODE_ENV === 'production'){
+    app.set('trust proxy', 1)
+}
+app.use(cookieParser())
 app.use(express.json())
 app.use('/api/v1/auth-system', userRouter)
 app.use('/api/v1/investment', investMentRouter)
-app.use(cookieParser())
 app.use(errorHandler)
 
 // export class App {

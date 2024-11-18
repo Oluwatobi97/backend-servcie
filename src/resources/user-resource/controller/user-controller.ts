@@ -19,6 +19,7 @@ export class UserController {
             console.log(token)
 
             res.cookie('accessToken', token, {
+                httpOnly: true,
                 secure: true,
                 sameSite: 'strict',
                 maxAge: 1000 * 60 * 60
@@ -41,6 +42,7 @@ export class UserController {
             const token = await this.userService.logginUser(req.body)
 
             res.cookie('accessToken', token, {
+                httpOnly: true,
                 secure: true,
                 sameSite: 'strict',
                 maxAge: 1000 * 60 * 60
