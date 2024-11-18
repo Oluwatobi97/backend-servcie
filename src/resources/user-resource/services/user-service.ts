@@ -27,6 +27,8 @@ export class UserService {
         const newUser = await this.userRepository.creatUser(userDetails)
         const { email, id } = newUser[ 0 ]
 
+        console.log(email, 'hello')
+
         return this.generatedAccessToken({ id, email })
     }
 
