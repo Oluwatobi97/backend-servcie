@@ -1,7 +1,7 @@
 import { App, app } from './app'
 import logger from './utils/logget'
 
-const port = 5050
+const port = process.env.PORT || 5050
 
 
 
