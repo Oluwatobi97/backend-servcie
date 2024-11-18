@@ -1,8 +1,8 @@
 import express, { Express } from 'express'
 import cors from 'cors'
 import errorHandler from './utils/errorhandle'
-// import { userRouter } from './resources/user-resource/routes/user-routes'
-// import { investMentRouter } from './resources/investment-plan-resources/investment-routes'
+import { userRouter } from './resources/user-resource/routes/user-routes'
+import { investMentRouter } from './resources/investment-plan-resources/investment-routes'
 import cookieParser from 'cookie-parser'
 
 export const app = express()
