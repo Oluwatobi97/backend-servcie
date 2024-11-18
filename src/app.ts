@@ -17,9 +17,8 @@ app.use(cors({
     credentials: true
 }))
 app.use(express.json())
-app.use(errorHandler)
-app.use('/api/v1/auth-system', userRouter)
-app.use('/api/v1/investment', investMentRouter)
+// app.use('/api/v1/auth-system', userRouter)
+// app.use('/api/v1/investment', investMentRouter)
 app.use(errorHandler)
 
 export class App {
