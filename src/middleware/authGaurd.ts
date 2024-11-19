@@ -16,20 +16,20 @@ declare global {
 }
 // TODO WORK ON TYPE ODF COOKIE
 export const authGaurd = (req: Request, res: Response, next: NextFunction) => {
-    const token = req.headers.authorization
+    const token = req.headers
     console.log(token)
-    if (!token) throw new UnAuthorized('un Authorized')
+    // if (!token) throw new UnAuthorized('un Authorized')
 
-    const jwtPayload = decrypt(token)
+    // const jwtPayload = decrypt(token)
 
-    if (jwtPayload)
-    {
-        req.jwtPayload = jwtPayload
-        next()
-    } else
-    {
+    // if (jwtPayload)
+    // {
+    //     req.jwtPayload = jwtPayload
+    //     next()
+    // } else
+    // {
 
-        next(new UnAuthorized())
-    }
+    //     next(new UnAuthorized())
+    // }
 
 }
