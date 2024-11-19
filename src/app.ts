@@ -12,7 +12,7 @@ export const app = express()
 
 
 app.use(cors({
-        origin: "http://localhost:5173",
+        origin: "https://trading-bilr.onrender.com",
         credentials: true
 }))
 if(process.env.NODE_ENV === 'production'){
