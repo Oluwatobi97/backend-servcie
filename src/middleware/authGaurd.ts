@@ -6,6 +6,7 @@ import { BadRequestError, UnAuthorized } from "../utils/appError";
 // TODO AUTHGAURD
 
 import { JwtPayload } from 'jsonwebtoken';
+import logger from "../utils/logget";
 
 declare global {
     namespace Express {
@@ -15,21 +16,28 @@ declare global {
     }
 }
 // TODO WORK ON TYPE ODF COOKIE
+const convertToJwtPayload = (token:string)=>{
+    return decrypt(token)
+
+   
+}
+
 export const authGaurd = (req: Request, res: Response, next: NextFunction) => {
-    const token = req.cookies?.accessToken
-    console.log(token)
-    if (!token) throw new UnAuthorized('un Authorized')
-
-    const jwtPayload = decrypt(token)
-
-    if (jwtPayload)
-    {
-        req.jwtPayload = jwtPayload
-        next()
-    } else
-    {
-
-        next(new UnAuthorized())
-    }
+    const cookieToken = req.cookies?.accessToken
+    const authorizationToken = req.headers.authorization
+    logger.info(authorizationToken)
+    if (!cookieToken) throw new UnAuthorized('un-Authorized')
+    
+        const jwtPayload = decrypt(cookieToken)
+        
+        if (jwtPayload)
+            {
+                req.jwtPayload = jwtPayload
+                next()
+            } else
+            {
+        
+                next(new UnAuthorized())
+            }
 
 }
