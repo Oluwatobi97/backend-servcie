@@ -25,7 +25,7 @@ export class UserController {
             res.cookie('accessToken', token, {
                 httpOnly: true,
                 secure: true,
-                sameSite: 'strict',
+                sameSite: 'none',
                 maxAge: 1000 * 60 * 60
             }
             ).status(200).json({
@@ -49,7 +49,7 @@ export class UserController {
             res.cookie('accessToken', token, {
                 httpOnly: true,
                 secure: true,
-                sameSite: 'strict',
+                sameSite: 'none',
                 maxAge: 1000 * 60 * 60
             }
             ).status(200).json({
