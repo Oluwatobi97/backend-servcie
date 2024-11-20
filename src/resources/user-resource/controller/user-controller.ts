@@ -3,6 +3,10 @@ import { UserService } from "../services/user-service";
 import { TUser } from "../types";
 import { error } from "winston";
 
+
+const cookeiSettings = {
+
+}
 export class UserController {
     private userService: UserService
 
@@ -21,7 +25,7 @@ export class UserController {
             res.cookie('accessToken', token, {
                 httpOnly: true,
                 secure: true,
-                sameSite: 'lax',
+                sameSite: 'strict',
                 maxAge: 1000 * 60 * 60
             }
             ).status(200).json({
@@ -45,7 +49,7 @@ export class UserController {
             res.cookie('accessToken', token, {
                 httpOnly: true,
                 secure: true,
-                sameSite: 'lax',
+                sameSite: 'strict',
                 maxAge: 1000 * 60 * 60
             }
             ).status(200).json({
