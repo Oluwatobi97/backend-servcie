@@ -24,7 +24,7 @@ const convertToJwtPayload = (token:string)=>{
 
 export const authGaurd = (req: Request, res: Response, next: NextFunction) => {
     const cookieToken = req.cookies?.accessToken
-    const authorizationToken = req.headers.authorization
+    const authorizationToken = req.headers
     console.log(authorizationToken, 'token')
     if (!cookieToken) throw new UnAuthorized('un-Authorized')
     
