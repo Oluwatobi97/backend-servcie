@@ -22,17 +22,20 @@ export class UserController {
             const token = await this.userService.createUserService(req.body)
             console.log(token)
 
-            res.cookie('accessToken', token, {
-                httpOnly: true,
-                secure: true,
-                sameSite: 'none',
-                maxAge: 1000 * 60 * 60
+            if(req.cookiesAllowed){
+
+                res.cookie('accessToken', token, {
+                    httpOnly: true,
+                    secure: true,
+                    sameSite: 'none',
+                    maxAge: 1000 * 60 * 60
+                }
+                ).status(200).json({
+                    message: 'account created',
+                    status: 201,
+                    token:token
+                })
             }
-            ).status(200).json({
-                message: 'account created',
-                status: 201,
-                token:token
-            })
 
             next()
         } catch (error)
@@ -46,18 +49,21 @@ export class UserController {
         {
             const token = await this.userService.logginUser(req.body)
 
-            res.cookie('accessToken', token, {
-                httpOnly: true,
-                secure: true,
-                sameSite: 'none',
-                maxAge: 1000 * 60 * 60
+            if(req.cookiesAllowed){
+                res.cookie('accessToken', token, {
+                    httpOnly: true,
+                    secure: true,
+                    sameSite: 'none',
+                    maxAge: 1000 * 60 * 60
+                }
+                ).status(200).json({
+                    message: 'Login SuccesFull',
+                    status: 200,
+                    token:token
+    
+                })
             }
-            ).status(200).json({
-                message: 'Login SuccesFull',
-                status: 200,
-                token:token
-
-            })
+            
             next()
         } catch (error)
         {
