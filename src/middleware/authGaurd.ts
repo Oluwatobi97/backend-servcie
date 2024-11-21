@@ -13,14 +13,21 @@ declare global {
 }
 
 const convertToJwtPayload = (token: string | null, req: Request, next: NextFunction) => {
-  // if (!token) {
-  //   // Gracefully exit if token is null or undefined
-  //   return next(new UnAuthorized("Token is missing or invalid"));
-  // }
+  if (!token) {
+    return next(new UnAuthorized("Token is missing or invalid"));
+  }
 
-    const jwtPayload = decrypt(token!); // Replace with your decryption logic
-      req.jwtPayload = jwtPayload!; // Attach payload to the request
-      return next(); // Continue to the next middleware
+  try {
+    const jwtPayload = decrypt(token); // Assuming decrypt function handles errors internally
+    if (!jwtPayload) {
+      return next(new UnAuthorized("Invalid token payload"));
+    }
+
+    req.jwtPayload = jwtPayload; // Attach payload to the request
+    return next(); // Continue to the next middleware
+  } catch (error) {
+    return next(new UnAuthorized("Failed to decrypt token"));
+  }
 };
 
 export const authGuard = (req: Request, res: Response, next: NextFunction) => {
@@ -31,17 +38,23 @@ export const authGuard = (req: Request, res: Response, next: NextFunction) => {
       // Handle token from cookies
       const cookieToken = req.cookies?.accessToken;
       console.log("Cookie Token:", cookieToken);
+
       return convertToJwtPayload(cookieToken, req, next);
     }
 
     // Handle token from query string
-    const authorizationToken = req.query?.token as string;
-    const token = authorizationToken
-      ? authorizationToken.replace(/\\/g, "").slice(1, -1)
-      : null;
+    const authorizationToken = req.query?.token as string | undefined;
+    if (authorizationToken) {
+      // Remove extra characters if any (slashes, quotes)
+      const token = authorizationToken.replace(/\\/g, "").slice(1, -1);
+      console.log("Query Token:", token);
 
-    console.log("Query Token:", token);
-    return convertToJwtPayload(token, req, next);
+      return convertToJwtPayload(token, req, next);
+    }
+
+    // If no valid token is provided in cookies or query
+    return next(new UnAuthorized("No token provided"));
+
   } catch (error) {
     // Catch any unexpected errors
     console.error("AuthGuard Error:", error);
