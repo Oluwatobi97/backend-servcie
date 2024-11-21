@@ -13,19 +13,14 @@ declare global {
 }
 
 const convertToJwtPayload = (token: string | null, req: Request, next: NextFunction) => {
-  if (!token) {
-    // Gracefully exit if token is null or undefined
-    return next(new UnAuthorized("Token is missing or invalid"));
-  }
+  // if (!token) {
+  //   // Gracefully exit if token is null or undefined
+  //   return next(new UnAuthorized("Token is missing or invalid"));
+  // }
 
-  try {
-    const jwtPayload = decrypt(token); // Replace with your decryption logic
+    const jwtPayload = decrypt(token!); // Replace with your decryption logic
       req.jwtPayload = jwtPayload!; // Attach payload to the request
       return next(); // Continue to the next middleware
-  }
-   catch (error) {
-    return next(new UnAuthorized("Error processing token"));
-  }
 };
 
 export const authGuard = (req: Request, res: Response, next: NextFunction) => {
