@@ -4,12 +4,15 @@ import { UserController } from "../controller/user-controller";
 import { ValidateIncomingData } from "../../../middleware/validate-incoming-data";
 import { zodUserSchema } from "../zod/user-zod-schema";
 import { authGuard } from "../../../middleware/authGaurd";
+import { checkConsentMiddleware } from "../../../middleware/cooke-concent-middleware";
 
 export const userRouter = Router()
 const userController = new UserController()
 
 
 
+
+userRouter.use(checkConsentMiddleware)
 
 userRouter.post('/create-account', ValidateIncomingData(zodUserSchema), userController.createUser)
 

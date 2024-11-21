@@ -4,7 +4,6 @@ import errorHandler from './utils/errorhandle'
 import { userRouter } from './resources/user-resource/routes/user-routes'
 import { investMentRouter } from './resources/investment-plan-resources/investment-routes'
 import cookieParser from 'cookie-parser'
-import { checkConsentMiddleware } from './middleware/cooke-concent-middleware'
 
 export const app = express()
 
@@ -23,7 +22,7 @@ if(process.env.NODE_ENV === 'production'){
 app.use(cookieParser())
 app.use(express.json())
 
-app.use(checkConsentMiddleware)
+
 app.use('/api/v1/auth-system', userRouter)
 app.use('/api/v1/investment', investMentRouter)
 app.use(errorHandler)
