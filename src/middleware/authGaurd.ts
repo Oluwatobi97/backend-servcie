@@ -20,13 +20,10 @@ const convertToJwtPayload = (token: string | null, req: Request, next: NextFunct
 
   try {
     const jwtPayload = decrypt(token); // Replace with your decryption logic
-    if (jwtPayload) {
-      req.jwtPayload = jwtPayload; // Attach payload to the request
+      req.jwtPayload = jwtPayload!; // Attach payload to the request
       return next(); // Continue to the next middleware
-    } else {
-      return next(new UnAuthorized("Invalid token payload"));
-    }
-  } catch (error) {
+  }
+   catch (error) {
     return next(new UnAuthorized("Error processing token"));
   }
 };
