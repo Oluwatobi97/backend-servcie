@@ -1,46 +1,52 @@
 import { NextFunction, Request, Response } from "express";
 import { decrypt } from "../lib/jwt/jwt-sign";
-import { BadRequestError, UnAuthorized } from "../utils/appError";
-
-
-// TODO AUTHGAURD
-
-import { JwtPayload } from 'jsonwebtoken';
-import logger from "../utils/logget";
+import { UnAuthorized } from "../utils/appError";
+import { JwtPayload } from "jsonwebtoken";
 
 declare global {
-    namespace Express {
-        export interface Request {
-            jwtPayload?: JwtPayload;
-            cookiesAllowed:boolean
-        }
+  namespace Express {
+    export interface Request {
+      jwtPayload?: JwtPayload;
+      cookiesAllowed: boolean;
     }
-}
-// TODO WORK ON TYPE ODF COOKIE
-const convertToJwtPayload = (token:string, req:Request, next:NextFunction)=>{
-    const jwtPayload =  decrypt(token)
-    console.log(jwtPayload)
-    if (jwtPayload)
-        {
-            req.jwtPayload = jwtPayload
-            return next()
-        } else
-        {
-            return next(new UnAuthorized())
-        }
-   
+  }
 }
 
-export const authGaurd = (req: Request, res: Response, next: NextFunction) => {
-    console.log(req.cookiesAllowed)
-    if(req.cookiesAllowed){
-        const cookieToken = req.cookies?.accessToken
-        console.log(cookieToken)
-        if (!cookieToken) throw new UnAuthorized('un-Authorized')
-        return convertToJwtPayload(cookieToken, req, next)
+const convertToJwtPayload = (token: string | null, req: Request, next: NextFunction) => {
+  if (!token) return next(new UnAuthorized("Token is missing or invalid"));
+
+  try {
+    const jwtPayload = decrypt(token); // Your decryption logic here
+    if (jwtPayload) {
+      req.jwtPayload = jwtPayload;
+      return next();
+    } else {
+      return next(new UnAuthorized("Invalid token payload"));
     }
-    const authorizationToken = req.query?.token as String
-    const token = authorizationToken ? authorizationToken.replace(/\\/g, "").slice(1, -1) : null;
-    console.log(token)
-    return convertToJwtPayload(token!, req ,next)
-}
+  } catch (error) {
+    return next(new UnAuthorized("Error processing token"));
+  }
+};
+
+export const authGuard = (req: Request, res: Response, next: NextFunction) => {
+  try {
+    console.log("Cookies Allowed:", req.cookiesAllowed);
+
+    // Handle cookie-based token
+    if (req.cookiesAllowed) {
+      const cookieToken = req.cookies?.accessToken;
+      console.log("Cookie Token:", cookieToken);
+      return convertToJwtPayload(cookieToken, req, next);
+    }
+
+    // Handle query-based token
+    const authorizationToken = req.query?.token as string;
+    const token = authorizationToken
+      ? authorizationToken.replace(/\\/g, "").slice(1, -1)
+      : null;
+    console.log("Query Token:", token);
+    return convertToJwtPayload(token, req, next);
+  } catch (error) {
+    return next(error);
+  }
+};
