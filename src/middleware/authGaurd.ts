@@ -13,10 +13,10 @@ declare global {
 }
 
 const convertToJwtPayload = (token: string | null, req: Request, next: NextFunction) => {
-  if (!token) return next(new UnAuthorized("Token is missing or invalid"));
+  // if (!token) return next(new UnAuthorized("Token is missing or invalid"));
 
   try {
-    const jwtPayload = decrypt(token); // Your decryption logic here
+    const jwtPayload = decrypt(token!); // Your decryption logic here
     if (jwtPayload) {
       req.jwtPayload = jwtPayload;
       return next();
