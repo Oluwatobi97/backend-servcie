@@ -41,5 +41,6 @@ export const authGaurd = (req: Request, res: Response, next: NextFunction) => {
     }
     const authorizationToken = req.query?.token as String
     const token = authorizationToken ? authorizationToken.replace(/\\/g, "").slice(1, -1) : null;
+    console.log(token)
     convertToJwtPayload(token!, req ,next)
 }
