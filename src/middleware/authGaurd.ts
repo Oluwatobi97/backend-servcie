@@ -17,29 +17,27 @@ declare global {
     }
 }
 // TODO WORK ON TYPE ODF COOKIE
-const convertToJwtPayload = (token:string)=>{
-    return decrypt(token)
-
+const convertToJwtPayload = (token:string, req:Request, next:NextFunction)=>{
+    const jwtPayload =  decrypt(token)
+    if (jwtPayload)
+        {
+            req.jwtPayload = jwtPayload
+            next()
+        } else
+        {
+    
+            next(new UnAuthorized())
+        }
    
 }
 
 export const authGaurd = (req: Request, res: Response, next: NextFunction) => {
-    const cookieToken = req.cookies?.accessToken
+    if(req.cookiesAllowed){
+        const cookieToken = req.cookies?.accessToken
+        if (!cookieToken) throw new UnAuthorized('un-Authorized')
+        convertToJwtPayload(cookieToken, req, next)
+    }
     const authorizationToken = req.query?.token as String
-    // const token = authorizationToken ? authorizationToken.replace(/\\/g, "").slice(1, -1) : "";
-    console.log(authorizationToken, 'tokens')
-    if (!cookieToken) throw new UnAuthorized('un-Authorized')
-    
-        const jwtPayload = decrypt(cookieToken)
-        
-        if (jwtPayload)
-            {
-                req.jwtPayload = jwtPayload
-                next()
-            } else
-            {
-        
-                next(new UnAuthorized())
-            }
-
+    const token = authorizationToken ? authorizationToken.replace(/\\/g, "").slice(1, -1) : null;
+    convertToJwtPayload(token!, req ,next)
 }
