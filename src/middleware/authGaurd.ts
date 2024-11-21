@@ -13,13 +13,16 @@ declare global {
 }
 
 const convertToJwtPayload = (token: string | null, req: Request, next: NextFunction) => {
-  // if (!token) return next(new UnAuthorized("Token is missing or invalid"));
+  if (!token) {
+    // Gracefully exit if token is null or undefined
+    return next(new UnAuthorized("Token is missing or invalid"));
+  }
 
   try {
-    const jwtPayload = decrypt(token!); // Your decryption logic here
+    const jwtPayload = decrypt(token); // Replace with your decryption logic
     if (jwtPayload) {
-      req.jwtPayload = jwtPayload;
-      return next();
+      req.jwtPayload = jwtPayload; // Attach payload to the request
+      return next(); // Continue to the next middleware
     } else {
       return next(new UnAuthorized("Invalid token payload"));
     }
@@ -29,24 +32,27 @@ const convertToJwtPayload = (token: string | null, req: Request, next: NextFunct
 };
 
 export const authGuard = (req: Request, res: Response, next: NextFunction) => {
-  try {
-    console.log("Cookies Allowed:", req.cookiesAllowed);
+  console.log("Cookies Allowed:", req.cookiesAllowed);
 
-    // Handle cookie-based token
+  try {
     if (req.cookiesAllowed) {
+      // Handle token from cookies
       const cookieToken = req.cookies?.accessToken;
       console.log("Cookie Token:", cookieToken);
       return convertToJwtPayload(cookieToken, req, next);
     }
 
-    // Handle query-based token
+    // Handle token from query string
     const authorizationToken = req.query?.token as string;
     const token = authorizationToken
       ? authorizationToken.replace(/\\/g, "").slice(1, -1)
       : null;
+
     console.log("Query Token:", token);
     return convertToJwtPayload(token, req, next);
   } catch (error) {
-    return next(error);
+    // Catch any unexpected errors
+    console.error("AuthGuard Error:", error);
+    return next(new UnAuthorized("Authentication failed"));
   }
 };
