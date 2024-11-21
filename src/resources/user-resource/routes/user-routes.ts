@@ -14,8 +14,8 @@ const userController = new UserController()
 userRouter.post('/create-account', ValidateIncomingData(zodUserSchema), userController.createUser)
 
 userRouter.post('/login', ValidateIncomingData(zodUserSchema), userController.logginUser)
-
-userRouter.get('/authenticated-user', authGuard, userController.getLoggeinUser)
+userRouter.use(authGuard)
+userRouter.get('/authenticated-user',  userController.getLoggeinUser)
 userRouter.get('/log-out', userController.logOut)
 
 // i am using dependendency injpection pattern

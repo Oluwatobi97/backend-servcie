@@ -7,5 +7,6 @@ import { authGuard } from "../../middleware/authGaurd";
 export const investMentRouter = Router()
 
 const investmentController = new InvestMentController()
+investMentRouter.use(authGuard)
 investMentRouter.post('/create-investment-plan', ValidateIncomingData(investMentZodSchema), authGuard, investmentController.createInvestMentPlan)
 investMentRouter.get('/', authGuard, investmentController.getAllInvestMentPlan)
