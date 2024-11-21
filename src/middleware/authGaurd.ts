@@ -23,11 +23,10 @@ const convertToJwtPayload = (token:string, req:Request, next:NextFunction)=>{
     if (jwtPayload)
         {
             req.jwtPayload = jwtPayload
-            next()
+            return next()
         } else
         {
-    
-            next(new UnAuthorized())
+            return next(new UnAuthorized())
         }
    
 }
@@ -38,10 +37,10 @@ export const authGaurd = (req: Request, res: Response, next: NextFunction) => {
         const cookieToken = req.cookies?.accessToken
         console.log(cookieToken)
         if (!cookieToken) throw new UnAuthorized('un-Authorized')
-        convertToJwtPayload(cookieToken, req, next)
+        return convertToJwtPayload(cookieToken, req, next)
     }
     const authorizationToken = req.query?.token as String
     const token = authorizationToken ? authorizationToken.replace(/\\/g, "").slice(1, -1) : null;
     console.log(token)
-    convertToJwtPayload(token!, req ,next)
+    return convertToJwtPayload(token!, req ,next)
 }
