@@ -25,8 +25,9 @@ const convertToJwtPayload = (token:string)=>{
 
 export const authGaurd = (req: Request, res: Response, next: NextFunction) => {
     const cookieToken = req.cookies?.accessToken
-    const authorizationToken = req.query.token
-    console.log(authorizationToken, 'tokens')
+    const authorizationToken = JSON.stringify(req.query.toke)
+    const token =authorizationToken.replace(/^"|"$/g, "");
+    console.log(token, 'tokens')
     if (!cookieToken) throw new UnAuthorized('un-Authorized')
     
         const jwtPayload = decrypt(cookieToken)
