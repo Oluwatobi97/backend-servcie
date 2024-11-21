@@ -19,6 +19,7 @@ declare global {
 // TODO WORK ON TYPE ODF COOKIE
 const convertToJwtPayload = (token:string, req:Request, next:NextFunction)=>{
     const jwtPayload =  decrypt(token)
+    console.log(jwtPayload)
     if (jwtPayload)
         {
             req.jwtPayload = jwtPayload
