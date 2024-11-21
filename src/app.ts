@@ -22,7 +22,7 @@ if(process.env.NODE_ENV === 'production'){
 app.use(cookieParser())
 app.use(express.json())
 
-app.use(checkConsentMiddleware)
+// app.use(checkConsentMiddleware)
 app.use('/api/v1/auth-system', userRouter)
 app.use('/api/v1/investment', investMentRouter)
 app.use(errorHandler)

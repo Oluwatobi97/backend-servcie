@@ -22,7 +22,7 @@ export class UserController {
             const token = await this.userService.createUserService(req.body)
             console.log(token)
 
-            if(req.cookiesAllowed){
+            if(!req.cookiesAllowed){
 
                 res.cookie('accessToken', token, {
                     httpOnly: true,
@@ -49,7 +49,7 @@ export class UserController {
         {
             const token = await this.userService.logginUser(req.body)
 
-            if(req.cookiesAllowed){
+            if(!req.cookiesAllowed){
                 res.cookie('accessToken', token, {
                     httpOnly: true,
                     secure: process.env.NODE_ENV  === 'production',
