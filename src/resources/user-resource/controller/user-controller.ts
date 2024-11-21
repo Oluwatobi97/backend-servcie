@@ -62,14 +62,21 @@ export class UserController {
         }
     }
     getLoggeinUser = async (req: Request<{}, {}, TUser>, res: Response, next: NextFunction) => {
-        try
-        {
-            const loggedInUser = await this.userService.getLoggedInUser(req.jwtPayload!)
-            res.status(200).json(loggedInUser)
-            return
-        } catch (error)
-        {
-            next(error)
+        try {
+            if (!req.jwtPayload) {
+                return res.status(401).json({ message: "Unauthorized access" });
+            }
+            
+            const { id } = req.jwtPayload;
+            const user = await this.userService.getLoggedInUser(id);
+            
+            if (!user) {
+                return res.status(404).json({ message: "User not found" });
+            }
+
+            res.status(200).json(user);
+        } catch (error) {
+            next(error);
         }
     }
     logOut = async (req: Request<{}, {}, TUser>, res: Response, next: NextFunction) => {

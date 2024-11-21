@@ -13,7 +13,6 @@ declare global {
 }
 
 const convertToJwtPayload = (token: string | null, req: Request, next: NextFunction) => {
-  // Only proceed if token is not null
   if (token) {
     try {
       const jwtPayload = decrypt(token); // Assuming decrypt function handles errors internally
@@ -24,11 +23,10 @@ const convertToJwtPayload = (token: string | null, req: Request, next: NextFunct
       req.jwtPayload = jwtPayload; // Attach payload to the request
       return next(); // Continue to the next middleware
     } catch (error) {
-      return next(new UnAuthorized("Failed to decrypt"));
+      return next(new UnAuthorized("Failed to decrypt token"));
     }
   }
-  // Proceed to the next middleware without authentication if no token
-  next();
+  return next(); // Proceed if no token
 };
 
 export const authGuard = (req: Request, res: Response, next: NextFunction) => {
@@ -36,11 +34,15 @@ export const authGuard = (req: Request, res: Response, next: NextFunction) => {
 
   try {
     let token = null;
+    let tokenFound = false;
 
     if (req.cookiesAllowed) {
       // Try to get token from cookies first
       token = req.cookies?.accessToken;
       console.log("Cookie Token:", token);
+      if (token) {
+        tokenFound = true;
+      }
     }
 
     if (!token) {
@@ -48,13 +50,14 @@ export const authGuard = (req: Request, res: Response, next: NextFunction) => {
       const authorizationToken = req.query?.token as string | undefined;
       if (authorizationToken) {
         token = authorizationToken.replace(/\\/g, "").slice(1, -1);
+        tokenFound = true;
       }
       console.log("Query Token:", token);
     }
 
-    // If token is still null, proceed to the next middleware without authentication
-    if (!token) {
-      return next(); // Allow the request to continue without authentication
+    // If no token was found, allow the request to continue without setting the payload
+    if (!tokenFound) {
+      return next(); // Continue without authentication if no token
     }
 
     // Otherwise, authenticate using the found token
