@@ -44,7 +44,7 @@ export class UserService {
             return this.generatedAccessToken({ id, email })
         }
 
-        throw new UnAuthorized('Invalid username or password')
+        throw new BadRequestError('Invalid username or password')
     }
     getLoggedInUser = async (payLoad: JwtPayload) => {
         const { id } = payLoad
