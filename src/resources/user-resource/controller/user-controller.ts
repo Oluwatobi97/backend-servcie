@@ -8,7 +8,7 @@ const cookeiSettings ={
     httpOnly: true,
     secure: process.env.NODE_ENV  === 'production',
     sameSite:'none',
-    maxAge: 60 * 1000
+    // maxAge: 60 * 1000
 } as CookieOptions
 export class UserController {
     private userService: UserService
