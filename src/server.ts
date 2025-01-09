@@ -1,7 +1,6 @@
-const express = require('express')
 
+import { app } from './app'
 import logger from './utils/logget'
-export const app = express()
 
 
 const port = process.env.PORT || 5051

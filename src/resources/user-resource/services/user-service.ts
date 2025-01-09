@@ -27,6 +27,8 @@ export class UserService {
         const newUser = await this.userRepository.creatUser(userDetails)
         const { email, id } = newUser[ 0 ]
 
+        console.log(email, 'hello')
+
         return this.generatedAccessToken({ id, email })
     }
 
@@ -42,7 +44,7 @@ export class UserService {
             return this.generatedAccessToken({ id, email })
         }
 
-        throw new UnAuthorized('Invalid username or password')
+        throw new BadRequestError('Invalid username or password')
     }
     getLoggedInUser = async (payLoad: JwtPayload) => {
         const { id } = payLoad

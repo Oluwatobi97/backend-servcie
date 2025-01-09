@@ -1,8 +1,15 @@
-import { NextFunction, request, Request, response, Response } from "express";
+import { CookieOptions, NextFunction, request, Request, response, Response } from "express";
 import { UserService } from "../services/user-service";
 import { TUser } from "../types";
 import { error } from "winston";
 
+
+const cookeiSettings ={
+    httpOnly: true,
+    secure: process.env.NODE_ENV  === 'production',
+    sameSite:'none',
+    // maxAge: 60 * 1000
+} as CookieOptions
 export class UserController {
     private userService: UserService
 
@@ -16,19 +23,17 @@ export class UserController {
         try
         {
             const token = await this.userService.createUserService(req.body)
+            if(req.cookiesAllowed){
 
-            res.cookie('accessToken', token, {
-                httpOnly: true,
-                secure: true,
-                sameSite: 'strict',
-                maxAge: 1000 * 60 * 60
+                res.cookie('accessToken', token, cookeiSettings
+                ).status(200).json({
+                    message: 'account created',
+                    status: 201,
+                    token:token
+                })
             }
-            ).status(200).json({
-                message: 'account created',
-                status: 201
-            })
 
-            next()
+            return
         } catch (error)
         {
             next(error)
@@ -40,17 +45,17 @@ export class UserController {
         {
             const token = await this.userService.logginUser(req.body)
 
-            res.cookie('accessToken', token, {
-                httpOnly: true,
-                secure: true,
-                sameSite: 'strict',
-                maxAge: 1000 * 60 * 60
+            if(req.cookiesAllowed){
+                res.cookie('accessToken', token, cookeiSettings
+                ).status(200).json({
+                    message: 'Login SuccesFull',
+                    status: 200,
+                    token:token
+    
+                })
             }
-            ).status(200).json({
-                message: 'Login SuccesFull',
-                status: 200
-            })
-            next()
+            
+          return
         } catch (error)
         {
             next(error)
@@ -61,7 +66,7 @@ export class UserController {
         {
             const loggedInUser = await this.userService.getLoggedInUser(req.jwtPayload!)
             res.status(200).json(loggedInUser)
-            next()
+            return
         } catch (error)
         {
             next(error)
@@ -71,7 +76,7 @@ export class UserController {
         try
         {
             res.clearCookie('accessToken').status(200).json({ message: 'logout' })
-            next(error)
+            return
         } catch (error)
         {
             next(error)

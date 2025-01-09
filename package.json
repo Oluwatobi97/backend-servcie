@@ -6,8 +6,8 @@
   "scripts": {
     "test": "vitest ",
     "dev": "ts-node-dev src/server.ts",
-    "db:push": "drizzle-kit generate && drizzle-kit migrate && drizzle-kit push",
-    "build": "tsc src/server.ts",
+    "db:push": "drizzle-kit check && drizzle-kit generate && drizzle-kit migrate && drizzle-kit push",
+    "build": "tsc",
     "start": "node ./dist/server.js"
   },
   "keywords": [],

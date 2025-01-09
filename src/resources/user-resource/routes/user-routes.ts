@@ -3,7 +3,8 @@ import { request, Router } from "express";
 import { UserController } from "../controller/user-controller";
 import { ValidateIncomingData } from "../../../middleware/validate-incoming-data";
 import { zodUserSchema } from "../zod/user-zod-schema";
-import { authGaurd } from "../../../middleware/authGaurd";
+import { authGuard } from "../../../middleware/authGaurd";
+import { checkConsentMiddleware } from "../../../middleware/cooke-concent-middleware";
 
 export const userRouter = Router()
 const userController = new UserController()
@@ -11,11 +12,13 @@ const userController = new UserController()
 
 
 
+userRouter.use(checkConsentMiddleware)
+
 userRouter.post('/create-account', ValidateIncomingData(zodUserSchema), userController.createUser)
 
 userRouter.post('/login', ValidateIncomingData(zodUserSchema), userController.logginUser)
-
-userRouter.get('/authenticated-user', authGaurd, userController.getLoggeinUser)
+userRouter.use(authGuard)
+userRouter.get('/authenticated-user',  userController.getLoggeinUser)
 userRouter.get('/log-out', userController.logOut)
 
 // i am using dependendency injpection pattern
