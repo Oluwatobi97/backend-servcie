@@ -12,30 +12,31 @@ declare global {
     namespace Express {
         export interface Request {
             jwtPayload?: JwtPayload;
-            cookiesAllowed:boolean
+            cookiesAllowed: boolean
         }
     }
 }
 // TODO WORK ON TYPE ODF COOKIE
-const convertToJwtPayload = (token:string)=>{
+const convertToJwtPayload = (token: string) => {
     return decrypt(token)
 
-   
+
 }
 
 export const authGuard = (req: Request, res: Response, next: NextFunction) => {
     const cookieToken = req.cookies?.accessToken
+    console.log(cookieToken)
     if (!cookieToken) throw new UnAuthorized('un-Authorized')
-    
-        const jwtPayload = decrypt(cookieToken)
-        
-        if (jwtPayload)
-            {
-                req.jwtPayload = jwtPayload
-                next()
-            } else
-            {
-                next(new UnAuthorized())
-            }
+
+    const jwtPayload = decrypt(cookieToken)
+
+    if (jwtPayload)
+    {
+        req.jwtPayload = jwtPayload
+        next()
+    } else
+    {
+        next(new UnAuthorized())
+    }
 
 }

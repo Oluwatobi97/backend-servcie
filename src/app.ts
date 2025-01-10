@@ -12,15 +12,16 @@ export const app = express()
 
 
 app.use(cors({
-        origin: "https://investment-app-oe2x.onrender.com                                                                                           ",
-        credentials: true
+    origin: "https://investment-app-i3ko.onrender.com",
+    credentials: true
 }))
 
-if(process.env.NODE_ENV === 'production'){
-    app.set('trust proxy', 1)
-}
-app.use(cookieParser())
+// if (process.env.NODE_ENV === 'production')
+// {
+//     app.set('trust proxy', 1)
+// }
 app.use(express.json())
+app.use(cookieParser())
 
 
 app.use('/api/v1/auth-system', userRouter)

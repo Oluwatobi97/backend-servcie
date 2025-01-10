@@ -4,10 +4,10 @@ import { TUser } from "../types";
 import { error } from "winston";
 
 
-const cookeiSettings ={
+const cookeiSettings = {
     httpOnly: true,
-    secure: process.env.NODE_ENV  === 'production',
-    sameSite:'none',
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'none',
     // maxAge: 60 * 1000
 } as CookieOptions
 export class UserController {
@@ -23,19 +23,21 @@ export class UserController {
         try
         {
             const token = await this.userService.createUserService(req.body)
-            if(req.cookiesAllowed){
+            if (req.cookiesAllowed)
+            {
 
                 res.cookie('accessToken', token, cookeiSettings
                 ).status(200).json({
                     message: 'account created',
                     status: 201,
-                    token:token
+                    token: token
                 })
             }
 
             return
         } catch (error)
         {
+            console.log(error)
             next(error)
         }
 
@@ -45,17 +47,18 @@ export class UserController {
         {
             const token = await this.userService.logginUser(req.body)
 
-            if(req.cookiesAllowed){
+            if (req.cookiesAllowed)
+            {
                 res.cookie('accessToken', token, cookeiSettings
                 ).status(200).json({
                     message: 'Login SuccesFull',
                     status: 200,
-                    token:token
-    
+                    token: token
+
                 })
             }
-            
-          return
+
+            return
         } catch (error)
         {
             next(error)
