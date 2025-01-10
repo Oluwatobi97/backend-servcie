@@ -5,7 +5,7 @@ export default defineConfig({
     schema: './src/schemas/index.ts',
     out: './drizzle',
     dbCredentials: {
-        url: 'postgresql://tobi:NGgTeFxG3WiHmLAh44yVMPYPYq502MzY@dpg-cstkfhogph6c739frsng-a/invetment'
+        url: 'postgresql://kayode:mUTCPeinys3Bd5CNpiB1WzcqG9nqQgYw@dpg-cu0fq65ds78s73dd7di0-a.oregon-postgres.render.com/investment_app_2lk2'
     }
 
 })
