@@ -3,6 +3,6 @@ import { drizzle } from 'drizzle-orm/postgres-js'
 import postgres from 'postgres';
 
 
-const queryClient = postgres("postgresql://investment_bftn_user:eL2JbfqmS2SxxG5VuJeREgf4uxVU8LR9@dpg-cu24mj1opnds73ak9n00-a/investment_bftn");
+const queryClient = postgres("postgresql://investment_epev_user:VvYMCzxcVF7vEVwV3udUwp0ULgYf13MF@dpg-cu4n1bqj1k6c738pscc0-a/investment_epev");
 
 export const db = drizzle(queryClient);
